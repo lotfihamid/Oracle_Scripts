@@ -1,0 +1,1 @@
+select max(sequence#),thread# from v$archived_log group by thread#;

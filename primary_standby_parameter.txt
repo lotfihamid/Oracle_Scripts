@@ -1,0 +1,40 @@
+  alter system set log_archive_config ='dg_config=(hisdb,hisstb1,hisstb2)' 
+
+
+
+alter system set LOG_ARCHIVE_DEST_1='LOCATION=USE_DB_RECOVERY_FILE_DEST VALID_FOR=(ALL_LOGFILES,ALL_ROLES) DB_UNIQUE_NAME=hisdb' scope=both sid='*';
+
+alter system set LOG_ARCHIVE_DEST_2='SERVICE=hisstb1 ASYNC NOAFFIRM VALID_FOR=(ONLINE_LOGFILES,PRIMARY_ROLE) DB_UNIQUE_NAME=hisstb1' scope=both sid='*';
+
+
+alter system set LOG_ARCHIVE_DEST_3='SERVICE=hisstb2 ASYNC NOAFFIRM VALID_FOR=(ONLINE_LOGFILES,PRIMARY_ROLE) DB_UNIQUE_NAME=hisstb2' scope=both sid='*';
+
+
+alter system set log_archive_dest_state_1=enable scope=both;
+
+alter system set log_archive_dest_state_2=enable scope=both;
+
+alter system set log_archive_dest_state_3=enable scope=both;
+
+
+alter system set log_archive_format='%t_%s_%r.arc' scope=spfile sid='*';
+
+alter system set log_archive_max_processes=10 scope=both sid='*';
+
+
+
+
+alter system set fal_client=hisdb scope=both sid='*';
+
+alter system set fal_server=hisstb1,hisstb2 scope=both sid='*';
+
+
+ALTER DATABASE ADD STANDBY LOGFILE GROUP 7 ('+DATA') size 500M;
+ALTER DATABASE ADD STANDBY LOGFILE GROUP 8 ('+DATA') size 500M;
+ALTER DATABASE ADD STANDBY LOGFILE GROUP 9 ('+DATA') size 500M;
+ALTER DATABASE ADD STANDBY LOGFILE GROUP 10 ('+DATA') size 500M;
+ALTER DATABASE ADD STANDBY LOGFILE GROUP 11 ('+DATA') size 500M;
+ALTER DATABASE ADD STANDBY LOGFILE GROUP 12 ('+DATA') size 500M;
+ALTER DATABASE ADD STANDBY LOGFILE GROUP 13 ('+DATA') size 500M;
+
+alter system set standby_file_management=AUTO scope=both sid='*';
